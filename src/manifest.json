@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "insightful.ai",
+  "version": "1.0.0",
+  "description": "AI-powered content extraction and search extension",
+  
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+
+  "background": {
+    "service_worker": "src/background/backgroundScript.ts",
+    "type": "module"
+  },
+
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["src/content/contentScript.ts"]
+  }],
+
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/"
+  ],
+
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  }
+}
