@@ -15,3 +15,5 @@ dist/
 # Except these:
 !/.gitignore
 !/insightful.ai/
+.DS_Store
+**/.DS_Store
