@@ -7,12 +7,12 @@
  */
 
 import { Readability } from '@mozilla/readability';
-import type { ScrapedContent } from '../types/types';
+import type { ScrapedContent } from '../types';
 
 /**
  * Creates and styles the floating lightbulb button
  */
-export function createLightbulbButton() {
+function createLightbulbButton() {
   // Remove existing button if present
   const existingButton = document.getElementById('scraper-lightbulb-button');
   if (existingButton) {
@@ -63,7 +63,7 @@ export function createLightbulbButton() {
  * - Sends to background script
  * - Shows success/error feedback
  */
-export async function handleLightbulbClick() {
+async function handleLightbulbClick() {
   try {
     // Update button to loading state
     const button = document.getElementById('scraper-lightbulb-button');

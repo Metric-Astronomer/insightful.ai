@@ -3,18 +3,25 @@ import '@testing-library/jest-dom';
 // Mock Chrome API
 global.chrome = {
   runtime: {
-    sendMessage: jest.fn((message, callback) => {
+    sendMessage: jest.fn((_message, callback) => {
       callback({ success: true });
     })
   }
 } as any;
 
-// Mock Readability
+// Mock Readability with proper types
 jest.mock('@mozilla/readability', () => ({
   Readability: jest.fn().mockImplementation(() => ({
     parse: () => ({
       title: 'Test Title',
-      textContent: 'Test Content'
+      textContent: 'Test Content',
+      content: '<div>Test Content</div>',
+      length: 100,
+      excerpt: 'Test Excerpt',
+      byline: null,
+      dir: 'ltr',
+      siteName: null,
+      lang: null
     })
   }))
 }));
