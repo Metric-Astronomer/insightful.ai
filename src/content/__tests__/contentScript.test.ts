@@ -48,11 +48,26 @@ describe('Content Script', () => {
     createLightbulbButton();
     const button = document.getElementById('scraper-lightbulb-button');
     
+    // Create a promise that resolves after delay
+    const responsePromise = new Promise<void>(resolve => {
+      mockSendMessage.mockImplementationOnce((_msg: unknown, callback: ChromeCallback) => {
+        // Don't call callback immediately to let us check loading state
+        setTimeout(() => {
+          callback({ success: true });
+          resolve();
+        }, 100);
+      });
+    });
+
     // Start content extraction
-    await handleLightbulbClick();
+    const extractionPromise = handleLightbulbClick();
     
+    // Check loading state immediately
     expect(button?.innerHTML).toBe('⏳');
     expect(button?.style.pointerEvents).toBe('none');
+    
+    // Wait for extraction to complete
+    await Promise.all([extractionPromise, responsePromise]);
   });
 
   test('button shows success state after content saved', async () => {
@@ -74,12 +89,9 @@ describe('Content Script', () => {
     createLightbulbButton();
     const button = document.getElementById('scraper-lightbulb-button');
     
-    // Force Readability to fail
-    jest.mock('@mozilla/readability', () => ({
-      Readability: jest.fn().mockImplementation(() => ({
-        parse: () => null
-      }))
-    }));
+    mockSendMessage.mockImplementationOnce((_msg: unknown, callback: ChromeCallback) => {
+      callback({ success: false }); // Force error state
+    });
 
     await handleLightbulbClick();
     expect(button?.innerHTML).toBe('❌');
