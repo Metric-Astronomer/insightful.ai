@@ -6,7 +6,7 @@
  * the Dexie.js library for better developer ergonomics and Promise-based API.
  */
 
-import Dexie, { Table } from 'dexie';
+import Dexie, { Table } from 'dexie'; // Removed PromiseExtended import since it's no longer needed
 import type { ScrapedContent } from '../types';
 
 /**
@@ -169,16 +169,7 @@ class ScraperDatabase extends Dexie {
     }
   }
 
-  /**
-   * Deletes the entire database
-   * Returns Dexie's PromiseExtended type for compatibility
-   */
-  delete(): Dexie.Promise<void> {
-    if (this.isOpen()) {
-      super.close();
-    }
-    return Dexie.delete('ScraperDatabase');
-  }
+  // delete() method has been removed
 }
 
 // Export singleton instance
