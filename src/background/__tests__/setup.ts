@@ -1,7 +1,6 @@
-import { jest } from '@jest/globals';
-import 'fake-indexeddb/auto';
+// Change from ESM to CommonJS imports
+require('fake-indexeddb/auto');
 
-// Add any background-specific mocks here
 beforeEach(() => {
   jest.clearAllMocks();
 });
