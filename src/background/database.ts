@@ -13,7 +13,7 @@ import type { ScrapedContent } from '../types';
  * Database class for managing scraped content persistence
  * Extends Dexie to provide a typed, Promise-based API for IndexedDB operations
  */
-class ScraperDatabase extends Dexie {
+export class ScraperDatabase extends Dexie {
   // Declare table with TypeScript typing
   scrapedContent!: Table<ScrapedContent, number>;
 
