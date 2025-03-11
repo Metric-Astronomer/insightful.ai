@@ -27,8 +27,15 @@
       "@/*": ["./src/*"]
     },
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+
+    /* Declaration */
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "skipDefaultLibCheck": true
   },
   "include": ["src"],
+  "exclude": ["src/manifest.ts", "node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
