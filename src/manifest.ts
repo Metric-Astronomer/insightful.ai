@@ -1,4 +1,4 @@
-import { ManifestV3Export } from '@crxjs/vite-plugin'
+import { defineManifest, ManifestV3Export } from '@crxjs/vite-plugin';
 
 const manifest = {
   manifest_version: 3,
@@ -35,4 +35,8 @@ const manifest = {
   ]
 } satisfies ManifestV3Export
 
-export default manifest
+export default defineManifest(manifest);
+
+// Add this to prevent TypeScript from generating declarations
+// @ts-ignore
+export const __PREVENT_DECLARATION__ = true;

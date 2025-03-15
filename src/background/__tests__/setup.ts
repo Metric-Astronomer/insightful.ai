@@ -1,12 +1,27 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { indexedDB as fakeIndexedDB } from 'fake-indexeddb';
 import { jest } from '@jest/globals';
+
+// Define interface for our test info
+interface DBTestInfo {
+  createdDatabases: Set<string>;
+}
+
+// Properly extend the global namespace
+declare global {
+  // Use interface merging to extend the global object type
+  interface Global {
+    __dbTestInfo: DBTestInfo;
+  }
+  
+  // Make TypeScript recognize __dbTestInfo on the global object
+  var __dbTestInfo: DBTestInfo;
+}
 
 // Store original indexedDB for restoration
 const originalIndexedDB = global.indexedDB;
 
 // Define a global variable to track database names created during tests
-global.__dbTestInfo = { createdDatabases: new Set() };
+global.__dbTestInfo = { createdDatabases: new Set<string>() };
 
 // Before each test: provide completely fresh indexedDB 
 beforeEach(() => {

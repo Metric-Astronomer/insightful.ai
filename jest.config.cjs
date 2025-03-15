@@ -22,8 +22,8 @@ module.exports = {
       displayName: 'background',
       testMatch: ['<rootDir>/src/background/__tests__/**/*.test.ts'],
       setupFilesAfterEnv: [
-        '<rootDir>/src/background/__tests__/setup.ts',
-        'fake-indexeddb/auto'
+        '<rootDir>/src/background/__tests__/setup.ts'
+        // REMOVE 'fake-indexeddb/auto' to avoid double initialization
       ],
       transform: {
         '^.+\\.tsx?$': [
@@ -38,5 +38,8 @@ module.exports = {
   ],
   transformIgnorePatterns: [
     'node_modules/(?!(dexie|@jest/globals)/)'
-  ]
+  ],
+  // Add this to prevent concurrent tests interfering with each other
+  maxConcurrency: 1,
+  maxWorkers: 1
 }

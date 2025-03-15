@@ -17,8 +17,8 @@ export class ScraperDatabase extends Dexie {
   // Declare table with TypeScript typing
   scrapedContent!: Table<ScrapedContent, number>;
 
-  constructor() {
-    super('ScraperDatabase');
+  constructor(dbName: string = 'ScraperDatabase') {
+    super(dbName);
 
     /**
      * Database schema definition:
@@ -172,5 +172,5 @@ export class ScraperDatabase extends Dexie {
   // delete() method has been removed
 }
 
-// Export singleton instance
+// Export singleton instance with default name
 export const db = new ScraperDatabase();

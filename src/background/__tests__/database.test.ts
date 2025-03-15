@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeEach, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { ScraperDatabase } from '../database'; // Import the class instead of instance
 import type { ScrapedContent } from '../../types';
-import { indexedDB, IDBFactory } from 'fake-indexeddb';
-import 'fake-indexeddb/auto';
-
-// Store the original indexedDB for restoration later
-const originalIndexedDB = global.indexedDB;
+// Don't import fake-indexeddb/auto here - it's handled in setup.ts
 
 // Test data factory
 function createMockContent(override?: Partial<Omit<ScrapedContent, 'id' | 'timestamp'>>) {
@@ -18,34 +14,32 @@ function createMockContent(override?: Partial<Omit<ScrapedContent, 'id' | 'times
 }
 
 describe('ScraperDatabase - CRUD Operations', () => {
-  // Create a fresh database instance for each test
   let db: ScraperDatabase;
   
   beforeEach(async () => {
-    // Fully delete any existing DB instance
-    await new Promise((resolve, reject) => {
-      const delReq = indexedDB.deleteDatabase('ScraperDatabase');
-      delReq.onsuccess = resolve;
-      delReq.onerror = () => reject(delReq.error);
-      delReq.onblocked = () => reject(new Error('DB deletion blocked'));
-    });
+    // Generate a unique database name for each test run
+    const uniqueId = `${Date.now()}_${Math.random().toString(36).substring(2)}`;
+    const testDbName = `TestDatabase_${uniqueId}`;
     
-    // Reset global indexedDB
-    global.indexedDB = new IDBFactory();
+    // Track this database name for potential cleanup
+    if (global.__dbTestInfo) {
+      global.__dbTestInfo.createdDatabases.add(testDbName);
+    }
     
-    // Create a fresh database instance
-    db = new ScraperDatabase();
+    // Create a new database instance with the unique name
+    db = new ScraperDatabase(testDbName);
+    
     try {
       await db.open();
     } catch (error) {
       console.error('Database setup error:', error);
+      throw error; // Make test fail if DB setup fails
     }
   });
   
-  afterAll(() => {
-    // Clean up and restore original indexedDB
+  afterEach(() => {
+    // Close the database connection to prevent leaks
     db.close();
-    global.indexedDB = originalIndexedDB;
   });
 
   describe('Content Creation', () => {
